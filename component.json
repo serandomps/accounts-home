@@ -1,0 +1,21 @@
+{
+  "name": "accounts-home",
+  "description": "accounts-home component",
+  "local": [],
+  "styles": [
+    "styles.css"
+  ],
+  "scripts": [
+    "index.js"
+  ],
+  "templates": [
+    "template.html"
+  ],
+  "main": "index.js",
+  "dependencies": {
+    "serandomps/dust": "master",
+    "serandomps/serand": "master",
+    "serandomps/accounts-profile": "master",
+    "serandomps/user-register": "master"
+  }
+}
