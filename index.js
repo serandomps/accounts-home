@@ -2,40 +2,43 @@ var dust = require('dust')();
 var serand = require('serand');
 
 var profile = require('accounts-profile');
-var register = require('user-register');
+var signup = require('accounts-signup');
+
+var ready = false;
 
 var user;
 
 var context;
 
+serand.on('user', 'ready', function (usr) {
+    user = usr;
+    ready = true;
+    if (!context) {
+        return;
+    }
+    user ? profile(context.sandbox, context.done, user) : signup(context.sandbox, context.done, user);
+});
+
 serand.on('user', 'logged in', function (usr) {
     user = usr;
-    if (context.destroy) {
-        context.destroy();
-    }
-    profile(context.sandbox, function (err, destroy) {
-        context.destroy = destroy;
-    }, user);
 });
 
 serand.on('user', 'logged out', function () {
     user = null;
-    if (context.destroy) {
-        context.destroy();
-    }
-    register(context.sandbox, function (err, destroy) {
-        context.destroy = destroy;
-    }, context.options);
 });
 
 module.exports = function (sandbox, fn, options) {
     context = {
         sandbox: sandbox,
+        done: function (err, destroy) {
+            fn(err, function() {
+                destroy();
+            });
+        },
         options: options
     };
-    var done = function (err, destroy) {
-        context.destroy = destroy;
-        fn(err, destroy);
-    };
-    user ? profile(sandbox, done, user) : register(sandbox, done, options);
+    if (!ready) {
+        return;
+    }
+    user ? profile(context.sandbox, context.done, user) : signup(context.sandbox, context.done, user);
 };

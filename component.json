@@ -16,6 +16,6 @@
     "serandomps/dust": "master",
     "serandomps/serand": "master",
     "serandomps/accounts-profile": "master",
-    "serandomps/user-register": "master"
+    "serandomps/accounts-signup": "master"
   }
 }
