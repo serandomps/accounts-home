@@ -21,18 +21,34 @@ serand.on('user', 'ready', function (usr) {
 
 serand.on('user', 'logged in', function (usr) {
     user = usr;
+    if (!context) {
+        return;
+    }
+    context.destroy();
+    profile(context.sandbox, function (err, destroy) {
+        context.destroy = err ? serand.none : destroy;
+    }, user);
 });
 
 serand.on('user', 'logged out', function () {
     user = null;
+    if (!context) {
+        return;
+    }
+    context.destroy();
+    signup(context.sandbox, function (err, destroy) {
+        context.destroy = err ? serand.none : destroy;
+    }, user);
 });
 
 module.exports = function (sandbox, fn, options) {
     context = {
         sandbox: sandbox,
         done: function (err, destroy) {
-            fn(err, function() {
+            context.destroy = destroy;
+            fn(err, function () {
                 destroy();
+                context = null;
             });
         },
         options: options
