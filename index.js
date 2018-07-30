@@ -16,7 +16,7 @@ serand.on('user', 'ready', function (usr) {
     if (!context) {
         return;
     }
-    user ? profile(context.sandbox, context.done, user) : signup(context.sandbox, context.done, user);
+    user ? profile(context.sandbox, user, context.done) : signup(context.sandbox, user, context.done);
 });
 
 serand.on('user', 'logged in', function (usr) {
@@ -41,20 +41,20 @@ serand.on('user', 'logged out', function () {
     }, user);
 });
 
-module.exports = function (sandbox, fn, options) {
+module.exports = function (sandbox, options, done) {
     context = {
         sandbox: sandbox,
+        options: options,
         done: function (err, destroy) {
             context.destroy = destroy;
-            fn(err, function () {
+            done(err, function () {
                 destroy();
                 context = null;
             });
-        },
-        options: options
+        }
     };
     if (!ready) {
         return;
     }
-    user ? profile(context.sandbox, context.done, user) : signup(context.sandbox, context.done, user);
+    user ? profile(context.sandbox, user, context.done) : signup(context.sandbox, user, context.done);
 };
