@@ -16,7 +16,7 @@ serand.on('user', 'ready', function (usr) {
     if (!context) {
         return;
     }
-    user ? profile(context.sandbox, user, context.done) : signup(context.sandbox, user, context.done);
+    user ? profile(context.sandbox, user, context.done) : signup(context.sandbox, {}, context.done);
 });
 
 serand.on('user', 'logged in', function (usr) {
@@ -56,5 +56,5 @@ module.exports = function (sandbox, options, done) {
     if (!ready) {
         return;
     }
-    user ? profile(context.sandbox, user, context.done) : signup(context.sandbox, user, context.done);
+    user ? profile(context.sandbox, user, context.done) : signup(context.sandbox, {}, context.done);
 };
