@@ -3,7 +3,8 @@ var serand = require('serand');
 
 dust.loadSource(dust.compile(require('./template'), 'accounts-home'));
 
-module.exports = function (ctx, sandbox, options, done) {
+module.exports = function (ctx, container, options, done) {
+    var sandbox = container.sandbox;
     options = options || {};
     dust.render('accounts-home', {
         username: options.username
